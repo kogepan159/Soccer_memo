@@ -39,6 +39,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Realmインスタンス取得
         let realm = try! Realm()
         // データ全権取得
+        print("--------------------")
+        print(realm.objects(MemoModel.self).count)
         self.tableCells = realm.objects(MemoModel.self)
         memoListView.reloadData()
         //タイトル名設定
@@ -69,16 +71,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //セクションごとの行数を返す。
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return memoList.count
+        return tableCells.count
     }
     
     //メモ一覧が表示する内容を返すメソッドでは宣言したmemoListが保持している行番号に対応したメモを返すように実装。
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell  {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
-        if indexPath.row >= memoList.count {
+        if indexPath.row >= tableCells.count {
             return cell
         }
-        cell.textLabel?.text = memoList[indexPath.row]
+        cell.textLabel?.text = tableCells[indexPath.row].memo
         return cell
     }
     
@@ -105,7 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 realm.delete(tableCells[indexPath.row])
             }
             //セルの削除
-            memoList.remove(at: indexPath.row)
+            self.tableCells = realm.objects(MemoModel.self)
             memoListView.reloadData()
         }
     }
@@ -143,6 +145,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //TextField の内容のクリア
         textField.text = ""
         //メモリリストビューの行とセクションを再読み込み
+        self.tableCells = realm.objects(MemoModel.self)
         memoListView.reloadData()
     }
 }

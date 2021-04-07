@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Realmのインスタンスを取得
         let realm = try! Realm()
-        
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
         return true
     }
 
